@@ -1,0 +1,22 @@
+Package: scClustAnnot
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Jiaqi", "Ma",
+      email = "jiaqi.ma@mail.utoronto.ca",
+      role = c("aut", "cre")
+    )
+  )
+Maintainer: Jiaqi Ma <jiaqi.ma@mail.utoronto.ca>
+Description: An integrated Clustering and Annotation tool in identify cell 
+  identity given scRNA-seq data build on Seurat.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    Seurat
+Depends: 
+    R (>= 4.0.0)
+RoxygenNote: 7.3.3
