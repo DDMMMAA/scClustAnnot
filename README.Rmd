@@ -30,7 +30,10 @@ An R package integrate into [Seurat V5](https://github.com/satijalab/seurat), me
 You can install the development version of scClustAnnot like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+> install.packages("devtools")
+> library("devtools")
+> devtools::install_github("DDMMMAA/scClustAnnot", build_vignettes = TRUE)
+> library("scClustAnnot")
 ```
 
 ## Example
