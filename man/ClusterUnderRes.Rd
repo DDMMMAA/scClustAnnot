@@ -7,7 +7,7 @@
 ClusterUnderRes(obj, start = 0, end = 1.5, margin = 0.1, showPlot = TRUE)
 }
 \arguments{
-\item{obj}{a Seurat object after pro-processing, PCA, and Neighbors constructed}
+\item{obj}{a Seurat object after pre-processing, PCA, and Neighbors constructed}
 
 \item{start}{The start of range of resolution (>= 0)}
 

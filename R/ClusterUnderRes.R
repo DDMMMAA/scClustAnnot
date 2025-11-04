@@ -5,7 +5,7 @@
 #' with clustering result stored in "metadata" slot with naming convention
 #' "RNA_snn_res.<resolution>".
 #'
-#' @param obj a Seurat object after pro-processing, PCA, and Neighbors constructed
+#' @param obj a Seurat object after pre-processing, PCA, and Neighbors constructed
 #' @param start The start of range of resolution (>= 0)
 #' @param end The end of range of resolution, inclusive (>= start)
 #' @param margin The margin of range (positive rational number)
