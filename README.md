@@ -23,6 +23,22 @@ You can install the development version of scClustAnnot like so:
 > library("scClustAnnot")
 ```
 
+## Overview
+
+…
+
+## Contributions
+
+…
+
+## References
+
+…
+
+## Acknowledgements
+
+This package was developed as part of an assessment for 2025 BCB410H: Applied Bioinformatics course at the University of Toronto, Toronto, CANADA. `scClustAnnot` welcomes issues, enhancement requests, and other contributions. To submit an issue, use the GitHub issues.
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
