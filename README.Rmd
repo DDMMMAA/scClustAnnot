@@ -36,6 +36,22 @@ You can install the development version of scClustAnnot like so:
 > library("scClustAnnot")
 ```
 
+## Overview
+
+...
+
+## Contributions
+
+...
+
+## References
+
+...
+
+## Acknowledgements
+
+...
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
