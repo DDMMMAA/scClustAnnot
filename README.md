@@ -25,7 +25,11 @@ You can install the development version of scClustAnnot like so:
 
 ## Overview
 
-…
+``` r
+ls("package:scClustAnnot")
+data(package = "scClustAnnot") 
+browseVignettes("scClustAnnot")
+```
 
 ## Contributions
 

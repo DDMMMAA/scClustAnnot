@@ -17,7 +17,17 @@ Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
 Imports: 
-    Seurat
+    Seurat,
+    clustree,
+    ggraph,
+    ggplot2,
+    clustifyr,
+    SingleR,
+    clusterProfiler,
+    tidyverse
 Depends: 
     R (>= 4.0.0)
 RoxygenNote: 7.3.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
