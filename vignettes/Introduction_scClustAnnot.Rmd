@@ -36,17 +36,17 @@ To download **scClustAnnot**, use the following commands:
 
 ``` r
 require("devtools")
-devtools::install_github("anjalisilva/TestingPackage", build_vignettes = TRUE)
-library("TestingPackage")
+devtools::install_github("DDMMMAA/scClustAnnot", build_vignettes = TRUE)
+library("scClustAnnot")
 ```
 To list all sample functions available in the package:
 ``` r
-ls("package:TestingPackage")
+ls("package:scClustAnnot")
 ```
 
 To list all sample datasets available in the package:
 ``` r
-data(package = "TestingPackage")
+data(package = "scClustAnnot") 
 ```
 
 <br>
