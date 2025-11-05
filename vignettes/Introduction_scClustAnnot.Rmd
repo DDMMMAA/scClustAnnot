@@ -49,6 +49,10 @@ To list all sample datasets available in the package:
 data(package = "scClustAnnot") 
 ```
 
+## Example Data
+
+`scClustAnnot` contain one buildin scRNA-seq data. This is the same data as `Seurat` vignettes. The reason of choice same data as `Seuart` is because this package is heavyly based on `Seurat`.
+
 <br>
 
 ## Package References
