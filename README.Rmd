@@ -46,7 +46,7 @@ browseVignettes("scClustAnnot")
 
 ## Contributions
 
-...
+This package is an individual project developed and maintained solely by Jiaqi Ma, his contribution include project planing, literature review, documentation, implementation, etc. The package is heavily based on the `Seurat` framework. In `ClusterUnderRes()` function `Clustree` were utilized to generate basic cluster tree. In `SingleRAnnotate()` function, reference scRNA-seq annotation was accessed via `Celldex` API, `SingleR` were utilized for mapping query scRNA-seq data to reference data. In `FindClusterDeg()` funcion, `Seurat::FindAllMarkers()` play the role of identify cluster specific markers. Development of this package was assisted by ChatGPT 5. All generated code and documentation were manually reviewed, refined, and tested by the author before inclusion in the final package.
 
 ## References
 

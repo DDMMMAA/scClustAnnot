@@ -1,22 +1,25 @@
-test_that("SingleRAnnote validates inputs and prints helpful messages", {
-  # Not a Seurat object
-  expect_message(
+test_that("SingleRAnnote validates inputs with errors", {
+  # wrong obj
+  expect_error(
     SingleRAnnote("not_a_seurat", "dice", "2024-02-26"),
-    "# Argument:"
+    "`obj` must be a Seurat object\\."
   )
+  # wrong name
+  if (!exists("pbmc", inherits = FALSE)) {
+    suppressWarnings(try(data("pbmc", package = "scClustAnnot"), silent = TRUE))
+  }
+  skip_if_not(exists("pbmc"), "Built-in `pbmc` dataset not found")
 
-  # invalid name (not character)
-  expect_message(
-    SingleRAnnote(pbmc, name = 123, version = "2024-02-26"),
-    "# Argument:"
+  expect_error(
+    SingleRAnnote(pbmc, name = NA_character_, version = "2024-02-26"),
+    "`name` must be a non-empty single character string"
   )
-
-  # invalid version (not character)
-  expect_message(
-    SingleRAnnote(pbmc, name = "dice", version = 20240226),
-    "# Argument:"
+  expect_error(
+    SingleRAnnote(pbmc, name = "dice", version = ""),
+    "`version` must be a non-empty single character string"
   )
 })
+
 
 test_that("SingleRAnnote adds SingleR.labels to metadata (mocked for speed)", {
   skip_if_not_installed("Seurat")

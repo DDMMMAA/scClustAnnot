@@ -39,22 +39,28 @@
 
 
 SingleRAnnote <- function(obj, name, version) {
-  # Precondition checking
-  if (!inherits(obj, "Seurat") ||
-      (!is.character(name)) ||
-      (!is.character(version))) {
-    message("# Argument:")
-    message("#   obj: a Seurat object")
-    message("#   name the name of reference dataset. See avaliable dataset")
-    message("#   version the version of reference dataset.")
-  } else {
-    # fetch reference scRNA-seq data via celldex package
-    ref_data <- fetchReference(name, version)
-    SingleR_result <- SingleR(as.data.frame(as.matrix(obj[["RNA"]]$data)),
-                              ref_data, ref_data$label.main)
-    obj$SingleR.labels <- SingleR_result$labels
-    return(obj)
+  # Parameter checking
+  if (!inherits(obj, "Seurat")) {
+    stop("`obj` must be a Seurat object.", call. = FALSE)
   }
+
+  # name: single non-empty character
+  if (!is.character(name) || length(name) != 1L || is.na(name) || name == "") {
+    stop("`name` must be a non-empty single character string (e.g., 'dice').", call. = FALSE)
+  }
+
+  # version: single non-empty character
+  if (!is.character(version) || length(version) != 1L || is.na(version) || version == "") {
+    stop("`version` must be a non-empty single character string (e.g., '2024-02-26').", call. = FALSE)
+  }
+
+  # Function logic
+  # fetch reference scRNA-seq data via celldex package
+  ref_data <- fetchReference(name, version)
+  SingleR_result <- SingleR(as.data.frame(as.matrix(obj[["RNA"]]$data)),
+                            ref_data, ref_data$label.main)
+  obj$SingleR.labels <- SingleR_result$labels
+  return(obj)
 }
 
 #[END]

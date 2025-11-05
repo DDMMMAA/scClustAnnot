@@ -35,30 +35,50 @@
 #' @import ggraph
 
 
-ClusterUnderRes <- function(obj, start = 0, end = 1.5, margin = 0.1, showPlot = TRUE) {
-  # Precondition checking
-  if (!inherits(obj, "Seurat") ||
-      (start < 0) ||
-      (end < start) ||
-      (margin <= 0)) {
-    message("# Argument:")
-    message("#   obj: a Seurat object")
-    message("#   start: the start of range of resolution (>= 0, default == 0)")
-    message("#   end: the end of range of resolution (>= start, default == 1.5)")
-    message("#   margin: the margin of range (positive rational number, default == 0.1)")
-  } else {
-    range <- seq(start, end, margin)
-    # loop over range
-    for(i in range) {
-      obj <- FindClusters(obj, resolution = i)
-      message("Added clustering under resolution: ", i)
-    }
-    # plot cluster tree if showPlot == T
-    if (showPlot) {
-      print(clustree::clustree(obj))
-    }
-    return(obj)
+ClusterUnderRes <- function(
+    obj,
+    start = 0,
+    end = 1.5,
+    margin = 0.1,
+    showPlot = TRUE
+    ) {
+  # Arguments checking
+  if (!inherits(obj, "Seurat")) {
+    stop("`obj` must be a Seurat object.", call. = FALSE)
   }
+
+  # start
+  if (!is.numeric(start) || length(start) != 1L || !is.finite(start) || start < 0) {
+    stop("`start` must be a single finite numeric value >= 0.", call. = FALSE)
+  }
+
+  # end
+  if (!is.numeric(end) || length(end) != 1L || !is.finite(end) || end < start) {
+    stop("`end` must be a single finite numeric value >= `start`.", call. = FALSE)
+  }
+
+  # margin
+  if (!is.numeric(margin) || length(margin) != 1L || !is.finite(margin) || margin <= 0) {
+    stop("`margin` must be a single finite numeric value > 0.", call. = FALSE)
+  }
+
+  # showPlot
+  if (!is.logical(showPlot) || length(showPlot) != 1L || is.na(showPlot)) {
+    stop("`showPlot` must be a single logical (TRUE/FALSE).", call. = FALSE)
+  }
+
+  # Function logic
+  range <- seq(start, end, margin)
+  # loop over range
+  for(i in range) {
+    obj <- FindClusters(obj, resolution = i)
+    message("Added clustering under resolution: ", i)
+  }
+  # plot cluster tree if showPlot == T
+  if (showPlot) {
+    print(clustree::clustree(obj))
+  }
+  return(obj)
 }
 
 #[END]
