@@ -21,10 +21,7 @@ Imports:
     clustree,
     ggraph,
     ggplot2,
-    clustifyr,
     SingleR,
-    clusterProfiler,
-    tidyverse,
     celldex
 Depends: 
     R (>= 4.0.0)
