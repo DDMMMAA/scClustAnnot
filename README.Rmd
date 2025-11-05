@@ -46,7 +46,7 @@ data(package = "scClustAnnot")
 browseVignettes("scClustAnnot")
 ```
 
-`TestingPackage` currently contains 3 functions.
+`scClustAnnot` currently contains 3 functions.
 
 1.  ***ClusterUnderRes*** for cluster given scRNA-seq data under various resolution and generate a cluster tree visualization
 2.  ***FindClusterDeg*** for identify cluster specific differential expressed genes
