@@ -17,6 +17,7 @@
 #' }
 #'
 #' @examples
+#' \dontrun{
 #' # example using pbmc data
 #' # Complete pre-processing prior clustering
 #' pbmc <- Seurat::ScaleData(pbmc)
@@ -28,6 +29,7 @@
 #' pbmc <- Seurat::FindClusters(pbmc, resolution = 0.5)
 #' # Find Cluster DEGs
 #' result <- FindClusterDeg(pbmc)
+#' }
 #'
 #' @references
 #' Hao, Y., Stuart, T., Kowalski, M. H., Choudhary, S., Hoffman, P., Hartman, A., Srivastava, A., Molla, G., Madad, S., Fernandez-Granda, C., & Satija, R. (2024). Dictionary learning for integrative, multimodal and scalable single-cell analysis. Nature Biotechnology, 42(2), 293–304. \href{https://doi.org/10.1038/s41587-023-01767-y}{Link}

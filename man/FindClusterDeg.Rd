@@ -36,6 +36,7 @@ and log2FC thresholds, then computes a p_FC score = (1 - p_val) * avg_log2FC.
 Return a list of length two compose of splitted and combined DEG result
 }
 \examples{
+\dontrun{
 # example using pbmc data
 # Complete pre-processing prior clustering
 pbmc <- Seurat::ScaleData(pbmc)
@@ -47,6 +48,7 @@ pbmc <- ClusterUnderRes(pbmc, showPlot = FALSE)
 pbmc <- Seurat::FindClusters(pbmc, resolution = 0.5)
 # Find Cluster DEGs
 result <- FindClusterDeg(pbmc)
+}
 
 }
 \references{

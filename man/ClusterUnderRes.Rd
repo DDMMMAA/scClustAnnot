@@ -28,6 +28,7 @@ with clustering result stored in "metadata" slot with naming convention
 "RNA_snn_res.<resolution>".
 }
 \examples{
+\dontrun{
 # example using pbmc data
 # Complete pre-processing prior clustering
 pbmc <- Seurat::ScaleData(pbmc)
@@ -35,6 +36,7 @@ pbmc <- Seurat::RunPCA(pbmc)
 pbmc <- Seurat::FindNeighbors(pbmc, dims = 1:15, reduction = "pca")
 # perform clustering using default parameter without plotting
 pbmc <- ClusterUnderRes(pbmc, showPlot = FALSE)
+}
 
 }
 \references{

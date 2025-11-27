@@ -12,6 +12,7 @@
 #'metadata slot as SingleR.labels
 #'
 #' @examples
+#' \dontrun{
 #' # example using pbmc data
 #' # Complete pre-processing prior clustering
 #' pbmc <- Seurat::ScaleData(pbmc)
@@ -22,6 +23,7 @@
 #' # PCA visualization
 #' Seurat::DimPlot(pbmc, reduction = "pca", label = TRUE, pt.size = 0.5,
 #' group.by = "SingleR.labels", repel = TRUE)
+#' }
 #'
 #' @references
 #' Schmiedel, B. J., Singh, D., Madrigal, A., Valdovino-Gonzalez, A. G., White, B. M., Zapardiel-Gonzalo, J., Ha, B., Altay, G., Greenbaum, J. A., McVicker, G., Seumois, G., Rao, A., Kronenberg, M., Peters, B., & Vijayanand, P. (2018). Impact of Genetic Polymorphisms on Human Immune Cell Gene Expression. Cell, 175(6), 1701-1715.e16. \href{https://doi.org/10.1016/j.cell.2018.10.022}{Link}
@@ -33,7 +35,7 @@
 #' @export
 #' @import Seurat
 #' @import SingleR
-#' @import celldex
+#' @importFrom celldex fetchReference
 #' @import ggplot2
 #' @import ggraph
 
@@ -56,7 +58,7 @@ SingleRAnnote <- function(obj, name, version) {
 
   # Function logic
   # fetch reference scRNA-seq data via celldex package
-  ref_data <- fetchReference(name, version)
+  ref_data <- celldex::fetchReference(name, version)
   SingleR_result <- SingleR(as.data.frame(as.matrix(obj[["RNA"]]$data)),
                             ref_data, ref_data$label.main)
   obj$SingleR.labels <- SingleR_result$labels

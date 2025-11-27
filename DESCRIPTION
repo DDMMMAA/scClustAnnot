@@ -1,6 +1,6 @@
 Package: scClustAnnot
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Integrated scRNA-seq clustering and annotation package based on Seurat
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -16,6 +16,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
+biocViews:
 Imports: 
     Seurat,
     clustree,

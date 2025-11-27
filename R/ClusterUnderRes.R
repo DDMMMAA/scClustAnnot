@@ -15,6 +15,7 @@
 #' slot with naming convention "RNA_snn_res.<resolution>".
 #'
 #' @examples
+#' \dontrun{
 #' # example using pbmc data
 #' # Complete pre-processing prior clustering
 #' pbmc <- Seurat::ScaleData(pbmc)
@@ -22,6 +23,7 @@
 #' pbmc <- Seurat::FindNeighbors(pbmc, dims = 1:15, reduction = "pca")
 #' # perform clustering using default parameter without plotting
 #' pbmc <- ClusterUnderRes(pbmc, showPlot = FALSE)
+#' }
 #'
 #' @references
 #' Zappia, L., & Oshlack, A. (2018). Clustering trees: A visualization for evaluating clusterings at multiple resolutions. GigaScience, 7(7), giy083. \href{https://doi.org/10.1093/gigascience/giy083}{Link}

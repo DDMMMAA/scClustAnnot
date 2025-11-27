@@ -23,6 +23,7 @@ selected previously annotated scRNA-seq data. Annotation result will be stored
 in metadata slot as SingleR.labels
 }
 \examples{
+\dontrun{
 # example using pbmc data
 # Complete pre-processing prior clustering
 pbmc <- Seurat::ScaleData(pbmc)
@@ -33,6 +34,7 @@ pbmc <- SingleRAnnote(pbmc, "dice", "2024-02-26")
 # PCA visualization
 Seurat::DimPlot(pbmc, reduction = "pca", label = TRUE, pt.size = 0.5,
 group.by = "SingleR.labels", repel = TRUE)
+}
 
 }
 \references{
