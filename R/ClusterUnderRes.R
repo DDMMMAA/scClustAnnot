@@ -15,8 +15,17 @@
 #' slot with naming convention "RNA_snn_res.<resolution>".
 #'
 #' @examples
+#'
+#' # Example 1 using subset of pbmc data
+#' # Complete pre-processing prior clustering
+#' sub_pbmc <- Seurat::ScaleData(sub_pbmc)
+#' sub_pbmc <- Seurat::RunPCA(sub_pbmc)
+#' sub_pbmc <- Seurat::FindNeighbors(sub_pbmc, dims = 1:15, reduction = "pca")
+#' # perform clustering using default parameter without plotting
+#' sub_pbmc <- ClusterUnderRes(sub_pbmc, showPlot = FALSE)
+#'
 #' \dontrun{
-#' # example using pbmc data
+#' # Example 2 using pbmc data
 #' # Complete pre-processing prior clustering
 #' pbmc <- Seurat::ScaleData(pbmc)
 #' pbmc <- Seurat::RunPCA(pbmc)

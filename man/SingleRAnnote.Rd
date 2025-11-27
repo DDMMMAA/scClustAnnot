@@ -23,8 +23,20 @@ selected previously annotated scRNA-seq data. Annotation result will be stored
 in metadata slot as SingleR.labels
 }
 \examples{
+
+# Example 1 using subset of pbmc data
+# Complete pre-processing prior clustering
+sub_pbmc <- Seurat::ScaleData(sub_pbmc)
+sub_pbmc <- Seurat::RunPCA(sub_pbmc)
+sub_pbmc <- Seurat::FindNeighbors(sub_pbmc, dims = 1:15, reduction = "pca")
+# perform annotation using bulk RNA-seq samples from https://doi.org/10.1016/j.cell.2018.10.022
+sub_pbmc <- SingleRAnnote(sub_pbmc, "dice", "2024-02-26")
+# PCA visualization
+Seurat::DimPlot(sub_pbmc, reduction = "pca", label = TRUE, pt.size = 0.5,
+group.by = "SingleR.labels", repel = TRUE)
+
 \dontrun{
-# example using pbmc data
+# Example 2 using pbmc data
 # Complete pre-processing prior clustering
 pbmc <- Seurat::ScaleData(pbmc)
 pbmc <- Seurat::RunPCA(pbmc)
