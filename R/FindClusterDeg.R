@@ -116,8 +116,5 @@ FindClusterDeg <- function(
     combined <- combined[ord, , drop = FALSE]
   }
 
-  list(
-    by_cluster = filtered_list,
-    combined = combined
-  )
+  return(list(by_cluster = filtered_list, combined = combined))
 }
