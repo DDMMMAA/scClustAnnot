@@ -22,7 +22,7 @@
 #' sub_pbmc <- Seurat::RunPCA(sub_pbmc)
 #' sub_pbmc <- Seurat::FindNeighbors(sub_pbmc, dims = 1:15, reduction = "pca")
 #' # perform clustering using default parameter without plotting
-#' sub_pbmc <- ClusterUnderRes(sub_pbmc, showPlot = FALSE)
+#' sub_pbmc <- ClusterUnderRes(sub_pbmc, showPlot = TRUE)
 #'
 #' \dontrun{
 #' # Example 2 using pbmc data
@@ -31,7 +31,7 @@
 #' pbmc <- Seurat::RunPCA(pbmc)
 #' pbmc <- Seurat::FindNeighbors(pbmc, dims = 1:15, reduction = "pca")
 #' # perform clustering using default parameter without plotting
-#' pbmc <- ClusterUnderRes(pbmc, showPlot = FALSE)
+#' pbmc <- ClusterUnderRes(pbmc, showPlot = TRUE)
 #' }
 #'
 #' @references
@@ -87,7 +87,17 @@ ClusterUnderRes <- function(
   }
   # plot cluster tree if showPlot == T
   if (showPlot) {
-    print(clustree::clustree(obj))
+    # Force ggraph namespace to load if it hasn't
+    if (!requireNamespace("ggraph", quietly = TRUE)) {
+      stop("Package 'ggraph' is needed for plotting.")
+    }
+
+    # Sometimes printing the plot fails if the guide isn't visible.
+    # We assign the plot to a variable first.
+    p <- clustree::clustree(obj)
+    # Explicitly tell ggplot to use the standard 'colorbar' guide
+    p <- p + ggplot2::guides(edge_colour = ggplot2::guide_colorbar(title = "Count"))
+    print(p)
   }
   return(obj)
 }

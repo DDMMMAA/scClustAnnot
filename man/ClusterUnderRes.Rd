@@ -35,7 +35,7 @@ sub_pbmc <- Seurat::ScaleData(sub_pbmc)
 sub_pbmc <- Seurat::RunPCA(sub_pbmc)
 sub_pbmc <- Seurat::FindNeighbors(sub_pbmc, dims = 1:15, reduction = "pca")
 # perform clustering using default parameter without plotting
-sub_pbmc <- ClusterUnderRes(sub_pbmc, showPlot = FALSE)
+sub_pbmc <- ClusterUnderRes(sub_pbmc, showPlot = TRUE)
 
 \dontrun{
 # Example 2 using pbmc data
@@ -44,7 +44,7 @@ pbmc <- Seurat::ScaleData(pbmc)
 pbmc <- Seurat::RunPCA(pbmc)
 pbmc <- Seurat::FindNeighbors(pbmc, dims = 1:15, reduction = "pca")
 # perform clustering using default parameter without plotting
-pbmc <- ClusterUnderRes(pbmc, showPlot = FALSE)
+pbmc <- ClusterUnderRes(pbmc, showPlot = TRUE)
 }
 
 }
