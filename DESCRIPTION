@@ -23,7 +23,9 @@ Imports:
     ggraph,
     ggplot2,
     SingleR,
-    celldex
+    celldex,
+    clustifyr,
+    clustifyrdatahub
 Depends: 
     R (>= 4.0.0)
 RoxygenNote: 7.3.3

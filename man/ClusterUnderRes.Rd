@@ -22,8 +22,9 @@ Returns an Seurat object with clustering result stored in "metadata"
 slot with naming convention "RNA_snn_res.<resolution>".
 }
 \description{
-Utilize Clustree, plot clustering tree showing the relationship
-between clustering under various resolution and return clustered Seurat object
+Iteratively call Seurat::FindClusters(), then utilize Clustree,
+plot clustering tree showing the relationship between clustering under
+various resolution and return clustered Seurat object
 with clustering result stored in "metadata" slot with naming convention
 "RNA_snn_res.<resolution>".
 }
