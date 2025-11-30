@@ -1,7 +1,7 @@
-test_that("SingleRAnnote validates inputs with errors", {
+test_that("SinglerAnnote validates inputs with errors", {
   # wrong obj
   expect_error(
-    SingleRAnnote("not_a_seurat", "dice", "2024-02-26"),
+    SinglerAnnote("not_a_seurat", "dice", "2024-02-26"),
     "`obj` must be a Seurat object\\."
   )
   # wrong name
@@ -11,17 +11,17 @@ test_that("SingleRAnnote validates inputs with errors", {
   skip_if_not(exists("pbmc"), "Built-in `pbmc` dataset not found")
 
   expect_error(
-    SingleRAnnote(pbmc, name = NA_character_, version = "2024-02-26"),
+    SinglerAnnote(pbmc, name = NA_character_, version = "2024-02-26"),
     "`name` must be a non-empty single character string"
   )
   expect_error(
-    SingleRAnnote(pbmc, name = "dice", version = ""),
+    SinglerAnnote(pbmc, name = "dice", version = ""),
     "`version` must be a non-empty single character string"
   )
 })
 
 
-test_that("SingleRAnnote adds SingleR.labels to metadata (mocked for speed)", {
+test_that("SinglerAnnote adds SingleR.labels to metadata (mocked for speed)", {
   skip_if_not_installed("Seurat")
 
   # mock out SingleR and fetchReference to avoid heavy data download
@@ -34,7 +34,7 @@ test_that("SingleRAnnote adds SingleR.labels to metadata (mocked for speed)", {
       list(labels = rep("MockType", n_cells))
     },
     {
-      obj2 <- SingleRAnnote(pbmc, name = "dice", version = "2024-02-26")
+      obj2 <- SinglerAnnote(pbmc, name = "dice", version = "2024-02-26")
 
       expect_s4_class(obj2, "Seurat")
       expect_true("SingleR.labels" %in% colnames(obj2@meta.data))

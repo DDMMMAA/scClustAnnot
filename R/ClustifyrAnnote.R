@@ -22,7 +22,7 @@
 #' sub_pbmc <- Seurat::RunUMAP(sub_pbmc, dims = 1:15)
 #' # perform annotation using Human hematopoietic cell microarray
 #' # (https://ftp.ncbi.nlm.nih.gov/geo/series/GSE24nnn/GSE24759/matrix/GSE24759_series_matrix.txt.gz)
-#' sub_pbmc <- ClustifyRAnnote(sub_pbmc, clustifyrdatahub::ref_hema_microarray())
+#' sub_pbmc <- ClustifyrAnnote(sub_pbmc, clustifyrdatahub::ref_hema_microarray())
 #'
 #' \dontrun{
 #' # Example 2 using pbmc data
@@ -34,7 +34,7 @@
 #' pbmc <- Seurat::RunUMAP(pbmc, dims = 1:15)
 #' # perform annotation using Human hematopoietic cell microarray
 #' # (https://ftp.ncbi.nlm.nih.gov/geo/series/GSE24nnn/GSE24759/matrix/GSE24759_series_matrix.txt.gz)
-#' pbmc <- ClustifyRAnnote(pbmc, clustifyrdatahub::ref_hema_microarray())
+#' pbmc <- ClustifyrAnnote(pbmc, clustifyrdatahub::ref_hema_microarray())
 #' }
 #'
 #' @references
@@ -47,7 +47,7 @@
 #' @import clustifyr
 #' @import clustifyrdatahub
 
-ClustifyRAnnote <- function(
+ClustifyrAnnote <- function(
     obj,
     ref_mat,
     cluster_col = "seurat_clusters"

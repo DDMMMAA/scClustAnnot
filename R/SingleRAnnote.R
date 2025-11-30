@@ -19,7 +19,7 @@
 #' sub_pbmc <- Seurat::RunPCA(sub_pbmc)
 #' sub_pbmc <- Seurat::FindNeighbors(sub_pbmc, dims = 1:15, reduction = "pca")
 #' # perform annotation using bulk RNA-seq samples from https://doi.org/10.1016/j.cell.2018.10.022
-#' sub_pbmc <- SingleRAnnote(sub_pbmc, "dice", "2024-02-26")
+#' sub_pbmc <- SinglerAnnote(sub_pbmc, "dice", "2024-02-26")
 #' # PCA visualization
 #' Seurat::DimPlot(sub_pbmc, reduction = "pca", label = TRUE, pt.size = 0.5,
 #' group.by = "SingleR.labels", repel = TRUE)
@@ -31,7 +31,7 @@
 #' pbmc <- Seurat::RunPCA(pbmc)
 #' pbmc <- Seurat::FindNeighbors(pbmc, dims = 1:15, reduction = "pca")
 #' # perform annotation using bulk RNA-seq samples from https://doi.org/10.1016/j.cell.2018.10.022
-#' pbmc <- SingleRAnnote(pbmc, "dice", "2024-02-26")
+#' pbmc <- SinglerAnnote(pbmc, "dice", "2024-02-26")
 #' # PCA visualization
 #' Seurat::DimPlot(pbmc, reduction = "pca", label = TRUE, pt.size = 0.5,
 #' group.by = "SingleR.labels", repel = TRUE)
@@ -52,7 +52,7 @@
 #' @import ggraph
 
 
-SingleRAnnote <- function(obj, name, version) {
+SinglerAnnote <- function(obj, name, version) {
   # Parameter checking
   if (!inherits(obj, "Seurat")) {
     stop("`obj` must be a Seurat object.", call. = FALSE)

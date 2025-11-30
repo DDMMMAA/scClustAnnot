@@ -25,7 +25,10 @@ Imports:
     SingleR,
     celldex,
     clustifyr,
-    clustifyrdatahub
+    clustifyrdatahub,
+    clusterProfiler,
+    org.Hs.eg.db,
+    org.Mm.eg.db
 Depends: 
     R (>= 4.0.0)
 RoxygenNote: 7.3.3
