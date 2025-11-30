@@ -85,7 +85,7 @@ ClusterGo <- function(
 
     # 3. Run enrichGO with error handling
     enrich_res <- tryCatch({
-      clusterProfiler::enrichGO(
+      enrichGO(
         gene          = gene_list,
         keyType       = "SYMBOL",
         OrgDb         = org_db,
