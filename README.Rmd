@@ -30,10 +30,10 @@ An R package integrate into [Seurat V5](https://github.com/satijalab/seurat), me
 To install the latest version of the package:
 
 ``` r
-> install.packages("devtools")
-> library("devtools")
-> devtools::install_github("DDMMMAA/scClustAnnot", build_vignettes = TRUE)
-> library("scClustAnnot")
+install.packages("devtools")
+library("devtools")
+devtools::install_github("DDMMMAA/scClustAnnot", build_vignettes = TRUE)
+library("scClustAnnot")
 ```
 
 To run shiny App: Under construction
@@ -46,11 +46,14 @@ data(package = "scClustAnnot")
 browseVignettes("scClustAnnot")
 ```
 
-`scClustAnnot` currently contains 3 functions.
+`scClustAnnot` Contains 5 functions.
 
 1.  ***ClusterUnderRes*** for cluster given scRNA-seq data under various resolution and generate a cluster tree visualization
 2.  ***FindClusterDeg*** for identify cluster specific differential expressed genes
-3.  ***SingleRAnnote*** for automatically annotate cell by map to previously annotated dataset
+3.  ***SinglerAnnote*** for automatically annotate cell by map to previously annotated dataset at single cell level
+4.  ***ClustifyrAnnote*** for automatically annotate cell by map to previously annotated dataset at cluster level
+5.  ***ClusterGo*** for conduct GO enrichment analysis among clusters
+
 
 The package also contains one scRNA-seq data already converted to Seurat object
 
@@ -72,6 +75,7 @@ OpenAI; 2025. Available from: https://chat.openai.com/
 -   Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., Schulman, J., Hilton, J., Kelton, F., Miller, L., Simens, M., Askell, A., Welinder, P., Christiano, P., Leike, J., & Lowe, R. (2022). Training language models to follow instructions with human feedback (No. arXiv:2203.02155). arXiv. <https://doi.org/10.48550/arXiv.2203.02155>
 -   Satijalab/seurat-data. (2025). [R]. satijalab. <https://github.com/satijalab/seurat-data> (Original work published 2019)
 -   Schmiedel, B. J., Singh, D., Madrigal, A., Valdovino-Gonzalez, A. G., White, B. M., Zapardiel-Gonzalo, J., Ha, B., Altay, G., Greenbaum, J. A., McVicker, G., Seumois, G., Rao, A., Kronenberg, M., Peters, B., & Vijayanand, P. (2018). Impact of Genetic Polymorphisms on Human Immune Cell Gene Expression. Cell, 175(6), 1701-1715.e16. <https://doi.org/10.1016/j.cell.2018.10.022>
+-   Wasserstein, R. L., & Lazar, N. A. (2016). The ASA Statement on p-Values: Context, Process, and Purpose. The American Statistician, 70(2), 129–133. <https://doi.org/10.1080/00031305.2016.1154108>
 -   Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the Tidyverse. Journal of Open Source Software, 4(43), 1686. <https://doi.org/10.21105/joss.01686>
 -   Wu, T., Hu, E., Xu, S., Chen, M., Guo, P., Dai, Z., Feng, T., Zhou, L., Tang, W., Zhan, L., Fu, X., Liu, S., Bo, X., & Yu, G. (2021). clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation, 2(3). <https://doi.org/10.1016/j.xinn.2021.100141>
 -   Zappia, L., & Oshlack, A. (2018). Clustering trees: A visualization for evaluating clusterings at multiple resolutions. GigaScience, 7(7), giy083. <https://doi.org/10.1093/gigascience/giy083>

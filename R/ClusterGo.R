@@ -6,7 +6,7 @@
 #' @param Deg_result A list object typically returned by `FindClusterDeg`.
 #' It must contain a sub-list named `by_cluster`, where each element contains
 #' a `gene` slot.
-#' @param org_db The organism database object or name.
+#' @param org_db The organism database object or name, "org.Hs.eg.db" for homo sapiens, "org.Mm.eg.db" for Mus musculus
 #' @param ont One of "BP", "MF", or "CC".
 #' @param p_val_cutoff P-value cutoff for enrichment.
 #' @param q_val_cutoff Q-value cutoff for enrichment.

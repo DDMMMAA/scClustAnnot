@@ -17,7 +17,7 @@ ClusterGo(
 It must contain a sub-list named `by_cluster`, where each element contains
 a `gene` slot.}
 
-\item{org_db}{The organism database object or name.}
+\item{org_db}{The organism database object or name, "org.Hs.eg.db" for homo sapiens, "org.Mm.eg.db" for Mus musculus}
 
 \item{ont}{One of "BP", "MF", or "CC".}
 

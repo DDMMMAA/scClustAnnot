@@ -28,7 +28,8 @@ Imports:
     clustifyrdatahub,
     clusterProfiler,
     org.Hs.eg.db,
-    org.Mm.eg.db
+    org.Mm.eg.db,
+    enrichplot
 Depends: 
     R (>= 4.0.0)
 RoxygenNote: 7.3.3

@@ -149,7 +149,7 @@ data <- RunUMAP(data, dims = 1:10)
 Choosing the right resolution for clustering is often arbitrary. `ClusterUnderRes` allows you to visualize the stability of clusters across a range of resolutions using a clustering tree. Recommended resolution is where clustering tree become stable (no arrows cross branch)
 
 ```{r clustering, fig.height=6, fig.width=8}
-# Perform clustering sweep from resolution 0.1 to 0.8
+# Perform clustering sweep from resolution 0.1 to 0.8 with margin = 0.1
 # This automatically generates a Clustree plot
 data <- ClusterUnderRes(
   data, 
@@ -184,7 +184,9 @@ The advantage of ranking by `p_FC` is that it **balances statistical significanc
 Returned result object is a list of length 2, contain DEG matrix separated by cluster stored in `deg_results$by_cluster`, and concatenated DEG matrix from all cluster stored in `deg_results$combined`
 
 ```{r find-deg}
-# Identify markers
+# Identify markers that:
+# at least 25% of cell with in and out each cluster is expressing
+# Unregulated at least 0.25 fold in cluster
 deg_results <- FindClusterDeg(data, pct_min = 0.25, logfc_min = 0.25)
 
 # Access data for Cluster 0
@@ -205,6 +207,8 @@ head(c0_genes)
 
 This method annotates every single cell individually using reference datasets (requires `celldex` package).
 
+All avaliable reference can be found [here](https://www.bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html)
+
 ```{r singler, eval=requireNamespace("celldex", quietly=TRUE)}
 # Annotate using the DICE reference
 data <- SinglerAnnote(data, name = "dice", version = "2024-02-26")
@@ -217,6 +221,8 @@ DimPlot(data, group.by = "SingleR.labels", label = TRUE, repel = TRUE) +
 ### Method B: Annotation with Clustifyr
 
 This method annotates entire clusters by correlating their average expression with a reference matrix.
+
+All avaliable reference can be found [here](https://www.bioconductor.org/packages/release/data/experiment/vignettes/clustifyrdatahub/inst/doc/clustifyrdatahub.html)
 
 ```{r clustifyr, eval=requireNamespace("clustifyrdatahub", quietly=TRUE)}
 # Load a reference (e.g., Human Hematopoietic Microarray)
@@ -234,18 +240,21 @@ DimPlot(data, group.by = "Clustifyr.labels", label = TRUE, repel = TRUE) +
 
 Finally, we can determine the biological functions of our clusters by running Gene Ontology (GO) enrichment on the markers identified in Step 2.
 
+org_db = `"org.Hs.eg.db"` (Homo sapiens), or `"org.Mm.eg.db"` (Mus musculus)
+
+ont = `"BP"` (Biological Process), `"MF"` (Molecular Function), `"CC"` (Cellular Component)
+
 ```{r cluster-go, eval=requireNamespace("org.Hs.eg.db", quietly=TRUE), fig.height=5}
 # Run GO analysis
 # Note: Requires org.Hs.eg.db to be installed
-if (requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
-  go_results <- ClusterGo(deg_results, ont = "BP")
-  
-  # Visualize enrichment for Cluster 0
-  if (!is.na(go_results$cluster_0)) {
-    enrichplot::dotplot(go_results$cluster_0, showCategory = 10) + 
-      ggtitle("GO Enrichment: Cluster 0")
-  }
-}
+go_results <- ClusterGo(deg_results, org_db = "org.Hs.eg.db", ont = "BP")
+
+# Visualize enrichment for Cluster 0 using dotplot
+enrichplot::dotplot(go_results$cluster_0, showCategory = 10) + 
+  ggtitle("GO Enrichment: Cluster 0")
+# or barplot
+barplot(go_results$cluster_0, showCategory = 10) + 
+  ggtitle("GO Enrichment: Cluster 0")
 ```
 
 ## Package References
@@ -264,6 +273,7 @@ if (requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
 -   Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., Schulman, J., Hilton, J., Kelton, F., Miller, L., Simens, M., Askell, A., Welinder, P., Christiano, P., Leike, J., & Lowe, R. (2022). Training language models to follow instructions with human feedback (No. arXiv:2203.02155). arXiv. <https://doi.org/10.48550/arXiv.2203.02155>
 -   Satijalab/seurat-data. (2025). [R]. satijalab. <https://github.com/satijalab/seurat-data> (Original work published 2019)
 -   Schmiedel, B. J., Singh, D., Madrigal, A., Valdovino-Gonzalez, A. G., White, B. M., Zapardiel-Gonzalo, J., Ha, B., Altay, G., Greenbaum, J. A., McVicker, G., Seumois, G., Rao, A., Kronenberg, M., Peters, B., & Vijayanand, P. (2018). Impact of Genetic Polymorphisms on Human Immune Cell Gene Expression. Cell, 175(6), 1701-1715.e16. <https://doi.org/10.1016/j.cell.2018.10.022>
+-   Wasserstein, R. L., & Lazar, N. A. (2016). The ASA Statement on p-Values: Context, Process, and Purpose. The American Statistician, 70(2), 129–133. <https://doi.org/10.1080/00031305.2016.1154108>
 -   Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the Tidyverse. Journal of Open Source Software, 4(43), 1686. <https://doi.org/10.21105/joss.01686>
 -   Wu, T., Hu, E., Xu, S., Chen, M., Guo, P., Dai, Z., Feng, T., Zhou, L., Tang, W., Zhan, L., Fu, X., Liu, S., Bo, X., & Yu, G. (2021). clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation, 2(3). <https://doi.org/10.1016/j.xinn.2021.100141>
 -   Zappia, L., & Oshlack, A. (2018). Clustering trees: A visualization for evaluating clusterings at multiple resolutions. GigaScience, 7(7), giy083. <https://doi.org/10.1093/gigascience/giy083>

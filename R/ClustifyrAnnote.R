@@ -5,7 +5,7 @@
 #' in metadata slot as Clustifyr.labels
 #'
 #' @param obj a Seurat object after pre-processing, PCA, and Neighbors constructed
-#' @param ref_mat A reference expression matrix (genes as rows, cell types as columns).
+#' @param ref_mat A reference expression matrix (https://www.bioconductor.org/packages/release/data/experiment/vignettes/clustifyrdatahub/inst/doc/clustifyrdatahub.html).
 #' @param cluster_col The name of the metadata column containing the cluster identities to annotate. Defaults to "seurat_clusters".
 #'
 #' @return Returns an Seurat object with Clustifyr annotation result added into

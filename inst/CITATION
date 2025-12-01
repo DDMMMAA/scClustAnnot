@@ -1,0 +1,12 @@
+citHeader("To cite scClustAnnot in publications use:")
+
+citEntry(entry = "Unpublished",
+  title        = "scClustAnnot: Integrated scRNA-seq clustering and annotation package based on Seurat",
+  author       = "Jiaqi Ma",
+  note         = "Unpublished",
+  year         = "2025",
+  url          = "https://github.com/DDMMMAA/scClustAnnot",
+  textVersion  =
+  paste("Ma, J (2025). scClustAnnot: Integrated scRNA-seq clustering and annotation package based on Seurat. Unpublished,
+  URL <https://github.com/DDMMMAA/scClustAnnot>.")
+)

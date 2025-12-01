@@ -9,7 +9,7 @@ ClustifyrAnnote(obj, ref_mat, cluster_col = "seurat_clusters")
 \arguments{
 \item{obj}{a Seurat object after pre-processing, PCA, and Neighbors constructed}
 
-\item{ref_mat}{A reference expression matrix (genes as rows, cell types as columns).}
+\item{ref_mat}{A reference expression matrix (https://www.bioconductor.org/packages/release/data/experiment/vignettes/clustifyrdatahub/inst/doc/clustifyrdatahub.html).}
 
 \item{cluster_col}{The name of the metadata column containing the cluster identities to annotate. Defaults to "seurat_clusters".}
 }
