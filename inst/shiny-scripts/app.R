@@ -56,6 +56,11 @@ ui <- fluidPage(
       helpText("Step 4: Identify marker genes for your chosen resolution. These are ranked by the 'p_FC' score: (1 - p_val) * avg_log2FC."),
       p("This finds genes uniquely expressed in each cluster. High p_FC genes are both statistically significant and strongly upregulated, defining the cluster's identity.",
         style = "color: #555; margin-bottom: 10px;"),
+
+      p(strong("Min LogFC:"), "Threshold for expression difference. Higher values (e.g., 0.5) find genes with stronger upregulation.", br(),
+        strong("Max P-Value:"), "Statistical significance cutoff. Lower values (e.g., 0.01) indicate more statistically significant",
+        style = "color: #555; font-size: 0.9em; margin-bottom: 10px;"),
+
       numericInput("deg_fc", "Min LogFC:", value = 0.25, step = 0.05),
       numericInput("deg_pval", "Max P-Value:", value = 0.05, step = 0.01),
       actionButton("run_deg", "Find DEGs"),
