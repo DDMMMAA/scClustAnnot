@@ -45,6 +45,9 @@
 #' GoResult <- ClusterGo(DegResult)
 #' }
 #'
+#' @references
+#' Wu, T., Hu, E., Xu, S., Chen, M., Guo, P., Dai, Z., Feng, T., Zhou, L., Tang, W., Zhan, L., Fu, X., Liu, S., Bo, X., & Yu, G. (2021). clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation, 2(3). \href{https://doi.org/10.1016/j.xinn.2021.100141}{Link}
+#'
 #' @export
 #' @import clusterProfiler
 #' @import org.Hs.eg.db
@@ -112,3 +115,5 @@ ClusterGo <- function(
 
   return(go_results)
 }
+
+#[END]

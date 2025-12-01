@@ -8,7 +8,7 @@
 #' @param ref_mat A reference expression matrix (genes as rows, cell types as columns).
 #' @param cluster_col The name of the metadata column containing the cluster identities to annotate. Defaults to "seurat_clusters".
 #'
-#' @return Returns an Seurat object with Clustofyr annotation result added into
+#' @return Returns an Seurat object with Clustifyr annotation result added into
 #' metadata slot as Clustifyr.labels
 #'
 #' @examples
@@ -70,7 +70,7 @@ ClustifyrAnnote <- function(
   # Function logic
 
   # 1. Run clustifyr
-  # We force obj_out = FALSE so we get the correlation matrix needed for cor_to_call
+  # Force obj_out = FALSE to get the correlation matrix needed for cor_to_call
   res_mat <- clustifyr::clustify(
     input = obj,
     cluster_col = cluster_col,

@@ -20,17 +20,23 @@ opts_chunk$set(fig.align = "center",
                dev.args=list(pointsize=10),
                par = TRUE, # needed for setting hook 
                collapse = TRUE, # collapse input & ouput code in chunks
-               warning = FALSE)
+               warning = FALSE,
+               message = FALSE)
+
 knit_hooks$set(par = function(before, options, envir)
   { if(before && options$fig.show != "none") 
        par(family = "sans", mar=c(4.1,4.1,1.1,1.1), mgp=c(3,1,0), tcl=-0.5)
 })
 set.seed(1) # for exact reproducibility
 ```
-       
+
 ## Introduction
 
-`scClustAnnot` is an R package to perform clustering and annotation step in scRNA-seq work flow. Currently, clustering and annotation in scRNA-seq analysis requires many repetitive manual works, including resolution tuning, identifying differentially expressed genes (DEGs), and interpreting DEGs biological functions at given context, which is time consuming and subject to researcher’s bias. There exists some automatic annotation tool, however, mostly done by map to previously annotated data. In that case, the quality of previously annotated data is a great concern. This package aims to automate above manual task to an extent, so that researchers’ bias can be reduced and analysis can be performed more effectively. The `scClustAnnot` package was developed using `R version 4.5.0 (2025-04-11 ucrt)`, platform `Microsoft Windows 11 25H2 (64 bit)`.
+`scClustAnnot` is an R package designed to streamline the clustering and annotation steps in the scRNA-seq workflow.
+
+Currently, clustering and annotation in scRNA-seq analysis require significant repetitive manual work, including resolution tuning, identifying differentially expressed genes (DEGs), and interpreting biological functions of DEGs within a given context. This process is time-consuming and subject to researcher bias. While automatic annotation tools exist, they mostly rely on mapping to previously annotated data, where the quality of the reference is a major concern.
+
+This package aims to automate these tasks to an extent, reducing researcher bias and allowing analysis to be performed more effectively. The `scClustAnnot` package was developed using `R version 4.5.0` on `Windows 11`.
 
 To download **scClustAnnot**, use the following commands:
 
@@ -39,25 +45,212 @@ require("devtools")
 devtools::install_github("DDMMMAA/scClustAnnot", build_vignettes = TRUE)
 library("scClustAnnot")
 ```
-To list all sample functions available in the package:
-``` r
-ls("package:scClustAnnot")
+
+## Background: scRNA-seq
+
+**Single-cell RNA sequencing (scRNA-seq)** has revolutionized transcriptomics by allowing researchers to uncover cellular heterogeneity at high resolution. Unlike bulk RNA-seq, which averages expression across thousands of cells, scRNA-seq profiles gene expression for each individual cell, enabling the discovery of rare cell types and complex developmental trajectories.
+
+**Seurat** is a prevalence R toolkit for single-cell genomics, developed by the [Satija Lab](https://satijalab.org/seurat/). It provides a comprehensive workflow for:
+
+1.  **Quality Control:** Removing low-quality cells (e.g., high mitochondrial content).
+2.  **Normalization:** Correcting for sequencing depth differences.
+3.  **Dimensionality Reduction:** Using PCA and UMAP to visualize high-dimensional data in 2D space.
+4.  **Clustering:** Grouping cells based on similar gene expression profiles.
+
+While Seurat excels at these foundational steps, the downstream tasks of **tuning clustering resolution** and **annotating cell identity** often remain manual and iterative. `scClustAnnot` is designed to seamlessly integrate into this Seurat workflow.
+
+## Key Concepts & Terminology
+
+If you are new to single-cell analysis, here is a brief intro on the jargon used throughout this package.
+
+### 1. Pre-processing
+Before any analysis can happen, the raw sequencing data must be "cleaned." This suite of steps is collectively called **Pre-processing**.
+
+* **Quality Control (QC):** Removing low-quality cells, such as dead cells (often identified by high mitochondrial gene expression) or empty droplets.
+
+* **Normalization:** Adjusting gene counts so that cells with different total sequencing depths are comparable.
+
+* **Scaling:** Linearly transform expression data such that mean expression across cells is 0, variance across cells is 1
+
+### 2. Dimensions (Dimensionality Reduction)
+A single cell dataset starts with **high dimensions**: ~20,000 genes for every single cell. It is impossible for humans to visualize 20,000 dimensions at once.
+
+**Dimensionality Reduction** (like PCA or UMAP) condenses this information into just lower dimensions while preserving the most important biological differences.
+
+* **PCA (Principal Component Analysis):** Linearly project high dimension data to lower dimension (typically to lower than 30 dimension)
+
+* **UMAP:** Non-linearly visualize high dimention data to 2 dimension
+
+### 3. Resolution
+Resolution controls the "granularity" of your clustering. It answers the question: *How fine-grained should we split the data?*
+
+* **Low Resolution (e.g., 0.1):** Groups cells into broad categories (e.g., "T-cells").
+
+* **High Resolution (e.g., 1.0+):** Splits cells into subtypes (e.g., "CD4+ Naive T-cells", "CD8+ Effector T-cells").
+
+* **The Challenge:** Finding the "correct" resolution is difficult.
+* **`ClusterUnderRes()`** helps you visualize how clusters split as you increase resolution.
+
+### 4. Annotation
+Clusters initially have no meaning—they are just numbers like "0", "1", "2". **Annotation** is the process of assigning biological labels (e.g., "B-cells", "Dendritic Cells") to these numbers.
+
+* **Manual Annotation:** Researchers look at marker genes (explained below) and guess the cell type based on literature.
+
+* **Automated Annotation:** Using software to compare your data against a reference atlas of known cell types.
+
+* **`SinglerAnnote()`** and **`ClustifyrAnnote()`** automate this process by mapping your cells to literature references.
+
+### 5. Marker Genes / Differentially Expressed Genes (DEGs)
+Once cells are clustered, we need to know *what* they are. A **Marker Gene** is a gene that is highly expressed in one cluster but low in all others.
+
+* **Differential Expression:** The statistical test used to find these genes.
+
+* **Example:** If *MS4A1* is high in Cluster 1 but low everywhere else, Cluster 1 is likely B-cells.
+
+* **`FindClusterDeg()`** automates the finding and filtering of these markers.
+
+### 6. Gene Ontology (GO) Enrichment
+A list of marker genes (e.g., *CD3D, CD3E, LCK, ZAP70*) is just a list of names. **GO Enrichment** translates this list into biological functions.
+
+* **How it works:** It checks databases to see if your marker genes map to a specific biological process more often than random chance.
+
+* **Result:** Instead of "Gene A, Gene B", the result is "T-cell Activation" or "Immune Response."
+
+* **`ClusterGo()`** performs this translation automatically.
+
+## Loading Data and Pre-processing
+
+`scClustAnnot` contains two built-in scRNA-seq dataset, `pbmc` and `sub_pbmc`. `pbmc` is the 10X Genomics PBMC 3k dataset used in [Seurat vignettes](https://satijalab.org/seurat/articles/pbmc3k_tutorial). `sub_pbmc` is a random subset of `pbmc`. All latter examples were conduct on `sub_pbmc` for performance consideration.
+
+First, we load the package and the data. Since the dataset is raw, we perform standard Seurat pre-processing (Normalization, Feature Selection, Scaling, PCA, and UMAP) before using `scClustAnnot` functions.
+
+```{r load-data}
+library(scClustAnnot)
+library(Seurat)
+library(ggplot2)
+
+# Load built-in data
+data("sub_pbmc")
+data("pbmc")
+
+# Standard Seurat Pre-processing
+# Change sub-pbmc to pbmc if you want to use full pbmc data
+data <- NormalizeData(sub_pbmc)
+data <- FindVariableFeatures(data)
+data <- ScaleData(data)
+# Standard Seurat dimension reduction
+data <- RunPCA(data, verbose = FALSE)
+data <- FindNeighbors(data, dims = 1:10)
+data <- RunUMAP(data, dims = 1:10)
 ```
 
-To list all sample datasets available in the package:
-``` r
-data(package = "scClustAnnot") 
+## Step 1: Optimized Clustering
+
+Choosing the right resolution for clustering is often arbitrary. `ClusterUnderRes` allows you to visualize the stability of clusters across a range of resolutions using a clustering tree. Recommended resolution is where clustering tree become stable (no arrows cross branch)
+
+```{r clustering, fig.height=6, fig.width=8}
+# Perform clustering sweep from resolution 0.1 to 0.8
+# This automatically generates a Clustree plot
+data <- ClusterUnderRes(
+  data, 
+  start = 0.1, 
+  end = 0.8, 
+  margin = 0.1, 
+  showPlot = TRUE
+)
 ```
 
-## Example Data
+Based on the tree stability, we might choose a specific resolution (e.g., 0.5) for downstream analysis.
 
-`scClustAnnot` contain one buildin scRNA-seq data. This is the same data as `Seurat` vignettes. The reason of choice same data as `Seuart` is because this package is heavyly based on `Seurat`.
+```{r set-identity}
+# Set the identity to the desired resolution
+data <- FindClusters(data, resolution = 0.5, verbose = FALSE)
+DimPlot(data, reduction = "umap", label = TRUE) + ggtitle("Unannotated Clusters")
+```
 
-<br>
+## Step 2: Marker Identification
+
+Once clusters are defined, we need to find marker genes to understand their biological identity. Standard workflows often sort genes at increasing order based on `p_val` and threshold at `p_val` == 0.05.
+
+However, inspired by [The ASA Statement on p-Values: Context, Process, and Purpose](https://doi.org/10.1080/00031305.2016.1154108)'s statement that `A p-value, or statistical significance, does not measure the size of an effect or the importance of a result` . 
+`FindClusterDeg` automates `FindAllMarkers` and solves this by calculating a custom ranking score, **`p_FC`**, defined as:
+
+$$p\_FC = (1 - p\_val) \times avg\_log2FC$$
+
+**Why use this score?**
+
+The advantage of ranking by `p_FC` is that it **balances statistical significance with biological effect size**. It penalizes genes with high p-values (where $1 - p\_val$ becomes small) while rewarding genes with high fold changes. This ensures that the top-ranked markers are those that are **both** highly reliable (low p-value) and strongly upregulated (high log2FC).
+
+Returned result object is a list of length 2, contain DEG matrix separated by cluster stored in `deg_results$by_cluster`, and concatenated DEG matrix from all cluster stored in `deg_results$combined`
+
+```{r find-deg}
+# Identify markers
+deg_results <- FindClusterDeg(data, pct_min = 0.25, logfc_min = 0.25)
+
+# Access data for Cluster 0
+c0_genes <- deg_results$by_cluster[["0"]]
+
+# Sort by p_FC in descending order
+c0_genes <- c0_genes[order(c0_genes$p_FC, decreasing = TRUE), ]
+
+# View the top markers
+head(c0_genes)
+```
+
+## Step 3: Automated Annotation
+
+`scClustAnnot` provides two methods for automated annotation: cell-level (using SingleR) and cluster-level (using Clustifyr).
+
+### Method A: Annotation with SingleR
+
+This method annotates every single cell individually using reference datasets (requires `celldex` package).
+
+```{r singler, eval=requireNamespace("celldex", quietly=TRUE)}
+# Annotate using the DICE reference
+data <- SinglerAnnote(data, name = "dice", version = "2024-02-26")
+    
+# Visualize
+DimPlot(data, group.by = "SingleR.labels", label = TRUE, repel = TRUE) + 
+  ggtitle("SingleR Annotation")
+```
+
+### Method B: Annotation with Clustifyr
+
+This method annotates entire clusters by correlating their average expression with a reference matrix.
+
+```{r clustifyr, eval=requireNamespace("clustifyrdatahub", quietly=TRUE)}
+# Load a reference (e.g., Human Hematopoietic Microarray)
+ref_mat <- clustifyrdatahub::ref_hema_microarray()
+  
+# Annotate clusters
+data <- ClustifyrAnnote(data, ref_mat = ref_mat)
+  
+# Visualize
+DimPlot(data, group.by = "Clustifyr.labels", label = TRUE, repel = TRUE) + 
+  ggtitle("Clustifyr Annotation")
+```
+
+## Step 4: Functional Analysis (GO Enrichment)
+
+Finally, we can determine the biological functions of our clusters by running Gene Ontology (GO) enrichment on the markers identified in Step 2.
+
+```{r cluster-go, eval=requireNamespace("org.Hs.eg.db", quietly=TRUE), fig.height=5}
+# Run GO analysis
+# Note: Requires org.Hs.eg.db to be installed
+if (requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
+  go_results <- ClusterGo(deg_results, ont = "BP")
+  
+  # Visualize enrichment for Cluster 0
+  if (!is.na(go_results$cluster_0)) {
+    enrichplot::dotplot(go_results$cluster_0, showCategory = 10) + 
+      ggtitle("GO Enrichment: Cluster 0")
+  }
+}
+```
 
 ## Package References
 
-- Jiaqi, M. (2025) scClustAnnot: An R package integrate into Seurat V5, meant to aid clustering and annotation step in scRNA-seq analysis. Unpublished. https://https://github.com/DDMMMAA/scClustAnnot
+-   Jiaqi, M. (2025) scClustAnnot: An R package integrate into Seurat V5, meant to aid clustering and annotation step in scRNA-seq analysis. Unpublished. <https://github.com/DDMMMAA/scClustAnnot>
 
 <br>
 
@@ -75,7 +268,7 @@ data(package = "scClustAnnot")
 -   Wu, T., Hu, E., Xu, S., Chen, M., Guo, P., Dai, Z., Feng, T., Zhou, L., Tang, W., Zhan, L., Fu, X., Liu, S., Bo, X., & Yu, G. (2021). clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation, 2(3). <https://doi.org/10.1016/j.xinn.2021.100141>
 -   Zappia, L., & Oshlack, A. (2018). Clustering trees: A visualization for evaluating clusterings at multiple resolutions. GigaScience, 7(7), giy083. <https://doi.org/10.1093/gigascience/giy083>
 
-----
+------------------------------------------------------------------------
 
 ```{r}
 sessionInfo()

@@ -14,7 +14,7 @@ ClustifyrAnnote(obj, ref_mat, cluster_col = "seurat_clusters")
 \item{cluster_col}{The name of the metadata column containing the cluster identities to annotate. Defaults to "seurat_clusters".}
 }
 \value{
-Returns an Seurat object with Clustofyr annotation result added into
+Returns an Seurat object with Clustifyr annotation result added into
 metadata slot as Clustifyr.labels
 }
 \description{

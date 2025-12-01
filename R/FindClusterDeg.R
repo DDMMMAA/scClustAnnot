@@ -49,10 +49,6 @@
 #'
 #' @export
 #' @import Seurat
-#' @import clustree
-#' @import ggplot2
-#' @import ggraph
-
 
 FindClusterDeg <- function(
     obj,
@@ -118,3 +114,5 @@ FindClusterDeg <- function(
 
   return(list(by_cluster = filtered_list, combined = combined))
 }
+
+#[END]

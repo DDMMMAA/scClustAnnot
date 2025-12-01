@@ -22,8 +22,7 @@ pbmc
 }
 \description{
 Consist of 2638 cell's metadata and RNA expression data
-post quality control, normalization, and FindVariableFeatures()
-from Seurat's vignettes
+post quality control from Seurat's vignettes
 (https://satijalab.org/seurat/articles/pbmc3k_tutorial)
 }
 \examples{

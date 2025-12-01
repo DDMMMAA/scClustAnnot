@@ -9,7 +9,7 @@
 #' @param version the version of reference dataset. See available dataset See available dataset \href{https://www.bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html}{here}
 #'
 #' @return Returns an Seurat object with SingleR annotation result added into
-#'metadata slot as SingleR.labels
+#' metadata slot as SingleR.labels
 #'
 #' @examples
 #'
@@ -48,8 +48,6 @@
 #' @import Seurat
 #' @import SingleR
 #' @importFrom celldex fetchReference
-#' @import ggplot2
-#' @import ggraph
 
 
 SinglerAnnote <- function(obj, name, version) {
@@ -71,8 +69,12 @@ SinglerAnnote <- function(obj, name, version) {
   # Function logic
   # fetch reference scRNA-seq data via celldex package
   ref_data <- celldex::fetchReference(name, version)
-  SingleR_result <- SingleR(as.data.frame(as.matrix(obj[["RNA"]]$data)),
-                            ref_data, ref_data$label.main)
+  test_data <- Seurat::GetAssayData(obj, layer = "data")
+  SingleR_result <- SingleR(
+    test = test_data,
+    ref = ref_data,
+    labels = ref_data$label.main
+  )
   obj$SingleR.labels <- SingleR_result$labels
   return(obj)
 }

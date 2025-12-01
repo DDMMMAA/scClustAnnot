@@ -1,8 +1,7 @@
 #' 10X Genomics Peripheral Blood Mononuclear Cells' (PBMC) scRNA-seq data
 #'
 #' Consist of 2638 cell's metadata and RNA expression data
-#' post quality control, normalization, and FindVariableFeatures()
-#' from Seurat's vignettes
+#' post quality control from Seurat's vignettes
 #' (https://satijalab.org/seurat/articles/pbmc3k_tutorial)
 #'
 #' @source 10X Genomics, Inc
@@ -24,8 +23,7 @@
 #' Random Subset of 10X Genomics Peripheral Blood Mononuclear Cells (PBMC) scRNA-seq data
 #'
 #' Consist of 500 cell's metadata and RNA expression data
-#' post quality control, normalization and FindVariableFeatures()
-#' from Seurat's vignettes
+#' post quality control from Seurat's vignettes
 #' (https://satijalab.org/seurat/articles/pbmc3k_tutorial)
 #'
 #' @source 10X Genomics, Inc

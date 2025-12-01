@@ -93,8 +93,7 @@ ClusterUnderRes <- function(
       stop("Package 'ggraph' is needed for plotting.")
     }
 
-    # Sometimes printing the plot fails if the guide isn't visible.
-    # We assign the plot to a variable first.
+    # Assign the plot to a variable first.
     p <- clustree::clustree(obj)
     # Explicitly tell ggplot to use the standard 'colorbar' guide
     p <- p + ggplot2::guides(edge_colour = ggplot2::guide_colorbar(title = "Count"))
