@@ -203,6 +203,9 @@ head(c0_genes)
 
 `scClustAnnot` provides two methods for automated annotation: cell-level (using SingleR) and cluster-level (using Clustifyr).
 
+`Note`: Since automated annotation are mostly done by map to previously annotated data, so the quality and relativity of previously
+annotated data is a great concern, choice it wisely.
+
 ### Method A: Annotation with SingleR
 
 This method annotates every single cell individually using reference datasets (requires `celldex` package).
@@ -243,6 +246,10 @@ Finally, we can determine the biological functions of our clusters by running Ge
 org_db = `"org.Hs.eg.db"` (Homo sapiens), or `"org.Mm.eg.db"` (Mus musculus)
 
 ont = `"BP"` (Biological Process), `"MF"` (Molecular Function), `"CC"` (Cellular Component)
+
+The `ClusterGo` function maps marker genes to biological pathways. In the resulting dotplot or barplot, look for terms on the y-axis with a high GeneRatio and a low p.adjust (typically red), which indicate highly significant biological activities.
+
+To manually annotate a cluster, combine these functional insights with the marker genes from Step 2. For example, if Cluster 0 is enriched for GO terms like "T cell activation" or "lymphocyte differentiation" and expresses known markers like CD3D, you can confidently annotate this cluster as T Cells.
 
 ```{r cluster-go, eval=requireNamespace("org.Hs.eg.db", quietly=TRUE), fig.height=5}
 # Run GO analysis
