@@ -34,19 +34,15 @@ ui <- fluidPage(
       sliderInput("res_range", "Resolution Range:", min = 0.1, max = 1.5, value = c(0.1, 0.8), step = 0.1),
       numericInput("res_margin", "Step Size:", value = 0.1, step = 0.1),
       actionButton("run_cluster", "Run Clustering"),
-
-      # Dynamic UI: Resolution Dropdown
       br(), br(),
       uiOutput("cluster_res_ui"),
       hr(),
 
-      # --- 4. MARKERS (UPDATED) ---
+      # --- 4. MARKERS ---
       h4("4. Find Markers"),
       numericInput("deg_fc", "Min LogFC:", value = 0.25, step = 0.05),
       numericInput("deg_pval", "Max P-Value:", value = 0.05, step = 0.01),
       actionButton("run_deg", "Find DEGs"),
-
-      # Dynamic UI: Cluster Selector for DEGs
       br(), br(),
       uiOutput("deg_cluster_ui"),
       hr(),
@@ -54,15 +50,34 @@ ui <- fluidPage(
       # --- 5. ANNOTATION ---
       h4("5. Annotation"),
       selectInput("anno_method", "Method:", choices = c("SingleR", "Clustifyr")),
+
+      # SingleR Options
       conditionalPanel(
         condition = "input.anno_method == 'SingleR'",
-        textInput("singler_ref", "Ref Name (celldex):", value = "dice")
+        textInput("singler_ref", "Ref Name (e.g., dice):", value = "dice"),
+        helpText(a("Click here for available references (celldex)",
+                   href="https://bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html",
+                   target="_blank")),
+        textInput("singler_ver", "Ref Version:", value = "2024-02-26")
       ),
+
+      # Clustifyr Options
+      conditionalPanel(
+        condition = "input.anno_method == 'Clustifyr'",
+        selectInput("clustifyr_ref", "Reference (clustifyrdatahub):", choices = NULL),
+        helpText(a("Click here for available references (clustifyrdatahub)",
+                   href="https://bioconductor.org/packages/release/data/experiment/vignettes/clustifyrdatahub/inst/doc/clustifyrdatahub.html",
+                   target="_blank"))
+      ),
+
       actionButton("run_anno", "Annotate"),
       hr(),
 
-      # --- 6. GO ENRICHMENT ---
+      # --- 6. GO ENRICHMENT (UPDATED) ---
       h4("6. GO Analysis"),
+      selectInput("go_org", "Organism:",
+                  choices = c("Human (org.Hs.eg.db)" = "org.Hs.eg.db",
+                              "Mouse (org.Mm.eg.db)" = "org.Mm.eg.db")),
       selectInput("go_ont", "Ontology:", choices = c("BP", "MF", "CC")),
       actionButton("run_go", "Run Enrichment")
     ),
@@ -74,9 +89,8 @@ ui <- fluidPage(
         tabPanel("1. UMAP", plotOutput("umap_plot", height = "600px")),
         tabPanel("2. Clustering Tree", plotOutput("clustree_plot", height = "600px")),
 
-        # Updated Tab Title
         tabPanel("3. Marker Table",
-                 h4(textOutput("table_title")), # Dynamic Title
+                 h4(textOutput("table_title")),
                  tableOutput("marker_table")),
 
         tabPanel("4. Annotation", plotOutput("anno_plot", height = "600px")),
@@ -90,6 +104,17 @@ ui <- fluidPage(
 server <- function(input, output, session) {
 
   values <- reactiveValues(obj = NULL, deg_res = NULL, go_res = NULL)
+
+  # --- DYNAMIC: Populate References ---
+  observe({
+    if (requireNamespace("clustifyrdatahub", quietly = TRUE)) {
+      all_exports <- getNamespaceExports("clustifyrdatahub")
+      c_options <- sort(grep("^ref_", all_exports, value = TRUE))
+      updateSelectInput(session, "clustifyr_ref",
+                        choices = c_options,
+                        selected = "ref_hema_microarray")
+    }
+  })
 
   # --- 1. Load Data ---
   observeEvent(input$load_demo, {
@@ -143,14 +168,6 @@ server <- function(input, output, session) {
       values$obj, start = input$res_range[1], end = input$res_range[2],
       margin = input$res_margin, showPlot = FALSE
     )
-    mid_res <- (input$res_range[1] + input$res_range[2]) / 2
-    res_col <- paste0("RNA_snn_res.", round(mid_res, 1))
-
-    if (res_col %in% colnames(values$obj@meta.data)) {
-      Idents(values$obj) <- res_col
-    } else {
-      Idents(values$obj) <- paste0("RNA_snn_res.", input$res_range[2])
-    }
     showNotification("Clustering Complete!", type = "message")
   })
 
@@ -190,7 +207,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # --- 4. Markers (UPDATED) ---
+  # --- 4. Markers ---
   observeEvent(input$run_deg, {
     req(values$obj)
     showNotification("Finding Markers based on Active Identity...", type = "message")
@@ -200,20 +217,13 @@ server <- function(input, output, session) {
     showNotification("Markers Found!", type = "message")
   })
 
-  # NEW: Dynamic Dropdown for DEG Clusters
   output$deg_cluster_ui <- renderUI({
     req(values$deg_res)
-    # Get available clusters from the result list
     clusters <- names(values$deg_res$by_cluster)
-
     if (length(clusters) == 0) return(NULL)
-
-    selectInput("deg_view_cluster", "View Cluster Markers:",
-                choices = c("All Clusters", clusters),
-                selected = "All Clusters")
+    selectInput("deg_view_cluster", "View Cluster Markers:", choices = c("All Clusters", clusters), selected = "All Clusters")
   })
 
-  # NEW: Dynamic Title
   output$table_title <- renderText({
     req(values$deg_res)
     if (is.null(input$deg_view_cluster) || input$deg_view_cluster == "All Clusters") {
@@ -225,15 +235,10 @@ server <- function(input, output, session) {
 
   output$marker_table <- renderTable({
     req(values$deg_res)
-
     view_choice <- input$deg_view_cluster
-
     if (is.null(view_choice) || view_choice == "All Clusters") {
-      # Show combined list
       head(values$deg_res$combined, 50)
     } else {
-      # Show specific cluster list
-      # The dataframe is already sorted by p_FC inside FindClusterDeg
       clus_df <- values$deg_res$by_cluster[[view_choice]]
       if (is.null(clus_df) || nrow(clus_df) == 0) {
         data.frame(Message = "No markers found for this cluster.")
@@ -247,14 +252,31 @@ server <- function(input, output, session) {
   observeEvent(input$run_anno, {
     req(values$obj)
     showNotification("Annotating...", type = "message")
+
     if (input$anno_method == "SingleR") {
       if (requireNamespace("celldex", quietly = TRUE)) {
-        values$obj <- scClustAnnot::SingleRAnnote(values$obj, name = input$singler_ref, version = "2024-02-26")
+        tryCatch({
+          values$obj <- scClustAnnot::SinglerAnnote(
+            values$obj,
+            name = input$singler_ref,
+            version = input$singler_ver
+          )
+          showNotification("SingleR Annotation Complete!", type = "message")
+        }, error = function(e) {
+          showNotification(paste("SingleR Error:", e$message), type = "error")
+        })
       } else { showNotification("Package 'celldex' missing.", type = "error") }
     } else {
       if (requireNamespace("clustifyrdatahub", quietly = TRUE)) {
-        ref <- clustifyrdatahub::ref_hema_microarray()
-        values$obj <- scClustAnnot::ClustifyrAnnote(values$obj, ref_mat = ref)
+        ref_name <- input$clustifyr_ref
+        tryCatch({
+          ref_func <- get(ref_name, envir = asNamespace("clustifyrdatahub"))
+          ref <- ref_func()
+          values$obj <- scClustAnnot::ClustifyrAnnote(values$obj, ref_mat = ref)
+          showNotification("Clustifyr Annotation Complete!", type = "message")
+        }, error = function(e) {
+          showNotification(paste("Clustifyr Error:", e$message), type = "error")
+        })
       } else { showNotification("Package 'clustifyrdatahub' missing.", type = "error") }
     }
   })
@@ -267,13 +289,28 @@ server <- function(input, output, session) {
     }
   })
 
-  # --- 6. GO Analysis ---
+  # --- 6. GO Analysis (UPDATED) ---
   observeEvent(input$run_go, {
     req(values$deg_res)
-    showNotification("Running GO (This takes time)...", type = "message")
-    if (requireNamespace("org.Hs.eg.db", quietly = TRUE)) {
-      values$go_res <- scClustAnnot::ClusterGo(values$deg_res, org_db = "org.Hs.eg.db", ont = input$go_ont)
-    } else { showNotification("Package 'org.Hs.eg.db' missing.", type = "error") }
+    selected_org <- input$go_org # Get user selection (e.g. "org.Hs.eg.db")
+
+    showNotification(paste("Running GO using", selected_org, "..."), type = "message")
+
+    # Dynamically check for the selected organism package
+    if (requireNamespace(selected_org, quietly = TRUE)) {
+      tryCatch({
+        values$go_res <- scClustAnnot::ClusterGo(
+          values$deg_res,
+          org_db = selected_org, # Pass selected DB
+          ont = input$go_ont
+        )
+        showNotification("GO Analysis Complete!", type = "message")
+      }, error = function(e) {
+        showNotification(paste("GO Error:", e$message), type = "error")
+      })
+    } else {
+      showNotification(paste("Package", selected_org, "is missing. Please install it."), type = "error")
+    }
   })
 
   output$go_ui <- renderUI({
