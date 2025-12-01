@@ -54,15 +54,15 @@ browseVignettes("scClustAnnot")
 
 `scClustAnnot` Contains 5 functions.
 
-1.  ***ClusterUnderRes*** for cluster given scRNA-seq data under various
-    resolution and generate a cluster tree visualization
-2.  ***FindClusterDeg*** for identify cluster specific differential
+1.  ***ClusterUnderRes()*** for cluster given scRNA-seq data under
+    various resolution and generate a cluster tree visualization
+2.  ***FindClusterDeg()*** for identify cluster specific differential
     expressed genes
-3.  ***SinglerAnnote*** for automatically annotate cell by map to
+3.  ***SinglerAnnote()*** for automatically annotate cell by map to
     previously annotated dataset at single cell level
-4.  ***ClustifyrAnnote*** for automatically annotate cell by map to
+4.  ***ClustifyrAnnote()*** for automatically annotate cell by map to
     previously annotated dataset at cluster level
-5.  ***ClusterGo*** for conduct GO enrichment analysis among clusters
+5.  ***ClusterGo()*** for conduct GO enrichment analysis among clusters
 
 The package also contains one scRNA-seq data already converted to Seurat
 object
@@ -73,16 +73,21 @@ object
 
 This package is an individual project developed and maintained solely by
 Jiaqi Ma, contributions include project planing, literature review,
-documentation, implementation, etc. The package is heavily based on the
-`Seurat` framework. In `ClusterUnderRes()` function `Clustree` were
-utilized to generate basic cluster tree. In `SingleRAnnotate()`
-function, reference scRNA-seq annotation was accessed via `Celldex` API,
-`SingleR` were utilized for mapping query scRNA-seq data to reference
-data. In `FindClusterDeg()` funcion, `Seurat::FindAllMarkers()` play the
-role of identify cluster specific markers. Development of this package
-was assisted by ChatGPT 5, mainly for read error/warning message and
-debug. All generated code and documentation were manually reviewed,
-refined, and tested by the author before inclusion in the final package.
+documentation, implementation, build vignette, shiny app, etc. The
+package is heavily based on the `Seurat` framework. In
+`ClusterUnderRes()` function `Clustree` was utilized to generate basic
+cluster tree. In `SingleRAnnotate()` function, reference scRNA-seq
+annotation was accessed via `Celldex` API, `SingleR` were utilized for
+mapping query scRNA-seq data to reference data. In `ClustifyrAnnote()`
+function, `clustifyr` is conducting core mapping to reference dataset
+fetched from `clustifyrdatahub`. In `FindClusterDeg()` funcion,
+`Seurat::FindAllMarkers()` play the role of identify cluster specific
+markers. In `ClusterGo()` function, `ClusterProfiler` was conducting
+core GO enrichment analysis. Development of this package was assisted by
+ChatGPT 5, for read error/warning message, debug, generate test case,
+and build shiny app. All generated code and documentation were manually
+reviewed, refined, and tested by the author before inclusion in the
+final package.
 
 ## References
 
@@ -91,8 +96,6 @@ refined, and tested by the author before inclusion in the final package.
 - Jiaqi, M. (2025) scClustAnnot: An R package integrate into Seurat V5,
   meant to aid clustering and annotation step in scRNA-seq analysis.
   Unpublished. <https://github.com/DDMMMAA/scClustAnnot>
-
-<br>
 
 ### Other Reference
 
