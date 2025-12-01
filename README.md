@@ -82,6 +82,16 @@ refined, and tested by the author before inclusion in the final package.
 
 ## References
 
+### This package
+
+- Jiaqi, M. (2025) scClustAnnot: An R package integrate into Seurat V5,
+  meant to aid clustering and annotation step in scRNA-seq analysis.
+  Unpublished. <https://github.com/DDMMMAA/scClustAnnot>
+
+<br>
+
+### Other Reference
+
 - 3k PBMCs from a Healthy Donor. (n.d.). 10x Genomics. Retrieved
   November 3, 2025, from
   <https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0>

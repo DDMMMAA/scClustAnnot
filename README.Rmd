@@ -65,6 +65,14 @@ This package is an individual project developed and maintained solely by Jiaqi M
 
 ## References
 
+### This package
+
+-   Jiaqi, M. (2025) scClustAnnot: An R package integrate into Seurat V5, meant to aid clustering and annotation step in scRNA-seq analysis. Unpublished. <https://github.com/DDMMMAA/scClustAnnot>
+
+<br>
+
+### Other Reference
+
 -   3k PBMCs from a Healthy Donor. (n.d.). 10x Genomics. Retrieved November 3, 2025, from <https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0>
 -   Analysis, visualization, and integration of Visium HD spatial datasets with Seurat. (n.d.). Retrieved October 14, 2025, from <https://satijalab.org/seurat/articles/pbmc3k_tutorial>
 -   Aran, D., Looney, A. P., Liu, L., Wu, E., Fong, V., Hsu, A., Chak, S., Naikawadi, R. P., Wolters, P. J., Abate, A. R., Butte, A. J., & Bhattacharya, M. (2019). Reference-based analysis of lung single-cell sequencing reveals a transitional profibrotic macrophage. Nature Immunology, 20(2), 163–172. <https://doi.org/10.1038/s41590-018-0276-y>
