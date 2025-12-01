@@ -38,7 +38,11 @@ devtools::install_github("DDMMMAA/scClustAnnot", build_vignettes = TRUE)
 library("scClustAnnot")
 ```
 
-To run shiny App: Under construction
+To run shiny App:
+
+``` r
+runscClustAnnot()
+```
 
 ## Overview
 
