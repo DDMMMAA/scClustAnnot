@@ -29,7 +29,6 @@ Imports:
     clusterProfiler,
     org.Hs.eg.db,
     org.Mm.eg.db,
-    enrichplot,
     shiny
 Depends: 
     R (>= 4.0.0)
@@ -37,7 +36,8 @@ RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    enrichplot
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/DDMMMAA/scClustAnnot
