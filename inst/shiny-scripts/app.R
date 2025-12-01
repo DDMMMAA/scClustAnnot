@@ -310,7 +310,10 @@ server <- function(input, output, session) {
 
   output$clustree_plot <- renderPlot({
     req(values$obj)
-    clustree::clustree(values$obj, prefix = "RNA_snn_res.")
+    # Patch for ggplot2/ggraph version conflict regarding edge_colourbar
+    p <- clustree::clustree(values$obj, prefix = "RNA_snn_res.")
+    p <- p + ggplot2::guides(edge_colour = ggplot2::guide_colorbar(title = "Count"))
+    p
   })
 
   output$umap_plot <- renderPlot({
